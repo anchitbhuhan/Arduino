@@ -1,0 +1,20 @@
+
+# compiling glue-lwip/
+
+GLUE_LWIP = esp-dhcpserver.c esp-sntp.c lwip-git.c
+GLUE_LWIP += esp-time.c
+GLUE_LWIP += esp-millis.c
+
+OBJ = \
+	$(patsubst %.c,$(BUILD)/%.o,$(wildcard glue/*.c)) \
+	$(patsubst %.c,$(BUILD)/glue-lwip/%.o,$(GLUE_LWIP)) \
+
+BUILD_INCLUDES = -I$(BUILD) -Iglue -Iglue-lwip -Ilwip2-src/src/include -I$(SDK)/include
+
+include makefiles/Makefile.defs
+include makefiles/Makefile.rules
+
+-include $(BUILD)/glue/*.d
+-include $(BUILD)/glue-lwip/*.d
+
+all: $(LWIP_LIB)
